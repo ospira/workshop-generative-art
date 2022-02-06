@@ -67,34 +67,50 @@ image.onload = () => {
       // redefine
   
       let points = []
-      
-      // go through the image pixels
-        for(x = 0; x < width * 4; x+= step)
-        {
-          for(y = height; y >= 0 ; y -= DENSITY)
-          {
-            var p = ((y * width * 4) + x);
-            
-            // grab the actual data from the
-            // pixel, ignoring any transparent ones
-            if(pixels.data[p+3] > 0)
-            {
-              console.log('non transparent')
-              const u = (x/4) / (width*4 - 1)
-              const v = y / (height*4 - 1) 
-              const position = [ u, v ]
-              var character = random.pick(characters);
-              var color = `rgb(${pixels.data[p]}, ${pixels.data[p+1]}, ${pixels.data[p+2]})`
-              // push on the particle
-              points.push({
-                color,
-                radius: Math.abs(random.gaussian()),
-                position,
-                character
-              });
-            }
-          }
+
+      for (var i = pixels.data.length; i >= 0; i -= 4) {
+        if (pixels.data[i + 3] > 0) {
+            var color = `rgb(${pixels.data[i]}, ${pixels.data[i+1]}, ${pixels.data[i+2]})`
+            var x = (i / 4) % width;
+            var y = Math.floor((i / 4) / width);
+            var position = [x, y]
+            var character = random.pick(characters);
+            points.push({
+              color,
+              radius: Math.abs(random.gaussian()),
+              position,
+              character
+            });
         }
+    }
+      
+      // // go through the image pixels
+      //   for(x = 0; x < width * 4; x+= step)
+      //   {
+      //     for(y = height; y >= 0 ; y -= DENSITY)
+      //     {
+      //       var p = ((y * width * 4) + x);
+            
+      //       // grab the actual data from the
+      //       // pixel, ignoring any transparent ones
+      //       if(pixels.data[p+3] > 0)
+      //       {
+      //         console.log('non transparent')
+      //         const u = x / (width*4*DENSITY - 1)
+      //         const v = y / (height*4*DENSITY - 1) 
+      //         const position = [ u, v ]
+      //         var character = random.pick(characters);
+      //         var color = `rgb(${pixels.data[p]}, ${pixels.data[p+1]}, ${pixels.data[p+2]})`
+      //         // push on the particle
+      //         points.push({
+      //           color,
+      //           radius: Math.abs(random.gaussian()),
+      //           position,
+      //           character
+      //         });
+      //       }
+      //     }
+      //   }
   
       console.log(pixels)
   
@@ -112,8 +128,10 @@ image.onload = () => {
           color,
           character
         } = data;
-        const x = lerp(margin, width - margin, position[0]);
-        const y = lerp(margin, height - margin, position[1]);
+        //const x = lerp(margin, width - margin, position[0]);
+        //const y = lerp(margin, height - margin, position[1]);
+        const x = position[0]
+        const y = position[1]
   
         // Draw the character
         context.fillStyle = color;
