@@ -115,14 +115,12 @@
                   });
                 }
               }
-              console.log(pixels)
+
 
               const margin = width * 0.175;
 
               context.fillStyle = background;
               context.fillRect(0, 0, width, height);
-
-              console.log(points)
 
               points.forEach(data => {
                 const {
@@ -141,10 +139,12 @@
                 context.font = `${radius}px "SpaceGrotesk-Medium"`;
                 context.textAlign = 'center';
                 context.textBaseline = 'middle';
-                console.log(lerp(margin, width - margin, position[0]), lerp(margin, height - margin, position[1]))
+                // console.log(lerp(margin, width - margin, position[0]), lerp(margin, height - margin, position[1]))
                 context.fillText(character, x, y);
               })
-              copiedCanvas = context.getContext("2d").getImageData(0, 0, width, height);
+              copiedCanvas = context.getImageData(0, 0, width, height);
+              console.log(new Date().getTime())
+              firstRender = false
               }
 
               
@@ -180,20 +180,21 @@
               
               // mouse moves
             // context.save()
-            context.translate(
-                originx,
-                originy
-            );
-            console.log("zoom", zoom)
-            context.scale(zoom,zoom);
-            context.translate(
-                -( mouseX / scale + originx - mouseX / ( scale * zoom ) ),
-                -( mouseY / scale + originy - mouseY / ( scale * zoom ) )
-            );
-            context.clearRect(0, 0, width, height);
-            context.drawImage(copiedCanvas, 0, 0);
-            // context.restore()
-            firstRender = false
+            else{
+              var imageObject=new Image();
+              imageObject.onload=function() {
+                context.clearRect(0, 0, width, height)
+                console.log("zoom", zoom)
+                context.scale(zoom, zoom);
+                context.translate(
+                    -( mouseX / scale + originx - mouseX / ( scale * zoom ) ),
+                    -( mouseY / scale + originy - mouseY / ( scale * zoom ) )
+                );
+                  // console.log(imageObject)
+                  context.drawImage(imageObject, 0, 0)  
+            }
+            imageObject.src=canvas.toDataURL();
+            }
             },
           }
         }
