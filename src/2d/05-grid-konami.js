@@ -179,7 +179,7 @@
 
               
               // mouse moves
-            context.save()
+            // context.save()
             context.translate(
                 originx,
                 originy
@@ -192,7 +192,7 @@
             );
             context.clearRect(0, 0, width, height);
             context.drawImage(copiedCanvas, 0, 0);
-            context.restore()
+            // context.restore()
             firstRender = false
             },
           }
